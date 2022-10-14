@@ -8,7 +8,7 @@ function Details() {
   const { getOneBeerDetails, beersToDisplay } = useBeer();
   // récupération de l'id, transmis via 'navigate' dans BeerCard
   const { state } = useLocation();
-  const { id } = state;
+  const { id, alreadyInCart } = state;
 
   const [beer, setBeer] = useState({});
 
@@ -30,6 +30,7 @@ function Details() {
   return (
     <div className="details-wrapper">
       <h1>{beer.name}</h1>
+      <p>This beer is {!alreadyInCart && "not"} in your cart.</p>
       <div className="presentation-div">
         <img src={beer.image_url} alt="" />
         <p>{beer.description}</p>

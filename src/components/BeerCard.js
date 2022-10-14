@@ -16,7 +16,7 @@ function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/details", { state: { id: id } });
+    navigate("/details", { state: { id: id, alreadyInCart: alreadyInCart } });
     // scroll vers le haut de la page
     window.scrollTo({
       top: 0,
