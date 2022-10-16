@@ -4,9 +4,15 @@ import { useBeer } from "../contexts/BeerContext";
 import "./BeerCard.css";
 
 function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
-  const { beersToDisplay, addBeerToCart, removeBeerFromCart, isInCart } =
-    useBeer();
+  const {
+    beersToDisplay,
+    addBeerToCart,
+    removeBeerFromCart,
+    isInCart,
+    countBeersInCart,
+  } = useBeer();
   const [alreadyInCart, setAlreadyInCart] = useState(false);
+  const [countInCart, setCountInCart] = useState(0);
 
   useEffect(() => {
     // on vérifie si la bière est déjà dans le panier
@@ -26,10 +32,12 @@ function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
 
   const handleAdd = (id) => {
     setAlreadyInCart(isInCart(id));
+    setCountInCart(countBeersInCart(id))
   };
 
   const handleRemove = (id) => {
-    setAlreadyInCart(false);
+    setAlreadyInCart(isInCart(id));
+    setCountInCart(countBeersInCart(id))
   };
 
   return (
@@ -42,7 +50,9 @@ function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
       )}
       <img src={image} alt="" />
       <h3 onClick={handleClick}>SEE DETAILS</h3>
-      {alreadyInCart ? <span>Already in your cart</span> : null}
+      {alreadyInCart ? (
+        <span>Already in your cart (x{countBeersInCart(id)})</span>
+      ) : null}
       {!displayedInCart ? (
         <div className="add-remove-div">
           <button
@@ -50,7 +60,6 @@ function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
               addBeerToCart(id);
               handleAdd(id);
             }}
-            disabled={alreadyInCart}
           >
             +
           </button>
@@ -59,7 +68,6 @@ function BeerCard({ name, image, volume, unit, id, displayedInCart }) {
               removeBeerFromCart(id);
               handleRemove(id);
             }}
-            disabled={!alreadyInCart}
           >
             -
           </button>

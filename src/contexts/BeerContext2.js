@@ -15,30 +15,19 @@ export const BeerProvider = ({ children }) => {
   const [beersInCart, setBeersInCart] = useState([]);
 
   useEffect(() => {
+    const arrayOfBeers = [];
     fetch(API_URL + pageToFetch)
       .then((res) => res.json())
       .then((data) => {
-        setBeersToDisplay(data);
+        Object.keys(data).forEach((key) => {
+          arrayOfBeers.push({ ...data[key], quantityInCart: 0 });
+        });
+        setBeersToDisplay(arrayOfBeers);
       });
+      console.log(beersToDisplay)
   }, [pageToFetch]);
 
-  const addBeerToCart = (id) => {
-    let beerToAdd = {};
-    const newCart = beersInCart;
-    // On sélectionne la bière cliquée parmis les bière affichées
-    Object.keys(beersToDisplay).forEach((key) => {
-      if (beersToDisplay[key].id === id) {
-        // on vérifie que la bière n'est pas déjà dans le panier
-        // Si la bière n'est pas dans le panier, on l'ajoute
-        beerToAdd = beersToDisplay[key];
-        newCart.push({
-          ...beerToAdd,
-          quantityInCart: countBeersInCart(id) + 1,
-        });
-        setBeersInCart(newCart);
-      }
-    });
-  };
+  
 
   const removeBeerFromCart = (id) => {
     const newCart = beersInCart;
